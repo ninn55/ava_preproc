@@ -42,6 +42,7 @@ con = bool(con)
 vid_suffix = ".mp4"
 clip_length = 3 # seconds
 clip_time_padding = 1.0 # seconds
+interval = 1
 
 def rd_basecsv(out_csv: str)->list:
     with open(out_csv, 'r') as filecsv:
@@ -71,16 +72,17 @@ def write_clips(frameloc:list, usecsv: bool, out_csv: str, vid_suffix: str, vidd
 
 def get_clips(videofile, video_id, vidduration, time_id, outdir_clips):
     #Input check
-    if vidduration[video_id] - time_id <= (clip_length + clip_time_padding):
+    print(int(vidduration[video_id]) - int(time_id))
+    if int(vidduration[video_id]) - int(time_id) <= (clip_length + clip_time_padding):
         warnings.warn("Clip too long for video file.")
         return
         
     outdir_folder = os.path.join(outdir_clips, video_id)
     mkdir_p(outdir_folder)
-    clip_start = time_id - clip_time_padding - float(clip_length) / 2
+    clip_start = float(int(time_id)) - clip_time_padding - float(clip_length) / 2
     if clip_start < 0:
         clip_start = 0
-    clip_end = time_id + float(clip_length) / 2
+    clip_end = float(int(time_id)) + float(clip_length) / 2
     outpath_clip = os.path.join(outdir_folder, '%d.%s' % (int(time_id), vid_suffix))
 
     ffmpeg_command = 'rm %(outpath)s;  \
