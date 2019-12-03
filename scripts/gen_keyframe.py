@@ -51,7 +51,7 @@ interval = 1
 #Output arg
 #outpath          |  Full path of output video
 #----------------------------------------------------#
-def get_keyframe(videofile: str, video_id: str, time_id: str, outdir_keyframes: str): -> str
+def get_keyframe(videofile: str, video_id: str, time_id: str, outdir_keyframes: str) -> str: 
     outdir_folder = os.path.join(outdir_keyframes, video_id)
     mkdir_p(outdir_folder)
     outpath = os.path.join(outdir_folder, '%d.jpg' % (int(time_id)))
@@ -118,7 +118,7 @@ def write_keyframe(videodir: str, frameloc: list, vid_suffix: str, usecsv: bool,
 #Output arg
 #frameloc       |  2D list containing video_id and frame location
 #----------------------------------------------------#
-def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: bool, interval: float, out_csv: str): -> list
+def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: bool, interval: float, out_csv: str) -> list: 
     #Input check
     if len(videolist) != len(vidduration):
         sys.exit("ERROR inner logic error. CODE 2")
@@ -159,7 +159,7 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
 #Output arg
 #videolist:     List of video_id(str)
 #----------------------------------------------------#
-def gen_vidList(videodir: str): -> list
+def gen_vidList(videodir: str) -> list: 
     # Auto exit check
     videos = subprocess.check_output("ls %(videodir)s" %{"videodir": videodir}, shell=True)
     #Last item in list is ""
@@ -183,7 +183,7 @@ def gen_vidList(videodir: str): -> list
 #Output arg
 #vidduration:   Dictionary of video, video_id:video_duration, str:int
 #----------------------------------------------------#
-def gen_vidduration(videodir: str, videolist: list, vid_suffix: str): -> dict
+def gen_vidduration(videodir: str, videolist: list, vid_suffix: str) -> dict: 
     dic = {}
     for i in videolist:
         video_id = i[0]
