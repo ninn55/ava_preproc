@@ -22,16 +22,20 @@ parser = argparse.ArgumentParser()
 #input Video path ./vid_fallDown
 parser.add_argument("--video_dir", default="./vid_fallDown", help="Videos source path.")
 parser.add_argument("--output_dir", default="./preproc_fallDown", help="Output directory.")
+parser.add_argument("--clean", default="", help="Clen directory or not.")
 
 FLAGS = parser.parse_args()
 
 videodir = FLAGS.video_dir
 outdir = FLAGS.output_dir
+con = FLAGS.clean
 
 #Keyframe output path ./preproc_fallDown/keyframes
 outdir_keyframes = os.path.join(outdir, "keyframes")
 #Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
 out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")
+#Change clean condition to bool
+con = bool(con)
 
 #Video suffix, default mp4
 vid_suffix = ".mp4"
@@ -205,12 +209,18 @@ def gen_vidduration(videodir: str, videolist: list, vid_suffix: str) -> dict:
             dic[video_id] = duration
     return dic
 
+#----------------------------------------------------#
+#Recycled from ava-dataset-tool by kevinlin311tw
+#----------------------------------------------------#
 def mkdir_p(path):
     try:
         _supermakedirs(path, 0o775) # Supporting Python 2 & 3
     except OSError: # Python >2.5
         pass          
 
+#----------------------------------------------------#
+#Recycled from ava-dataset-tool by kevinlin311tw
+#----------------------------------------------------#
 def _supermakedirs(path, mode):
     if not path or os.path.exists(path):
         return []
@@ -230,15 +240,16 @@ def _supermakedirs(path, mode):
 #----------------------------------------------------#
 def clean_all(outdir_keyframes: str, out_csv: str):
     warnings.warn("CLEANING CAUTION")
-    error = subprocess.call("rm -f %(out_csv)s"% {"out_csv": out_csv})
+    error = subprocess.call("git clean -fx")
     error = subprocess.call("rm -r %(outdir_keyframes)s"% {"outdir_keyframes": outdir_keyframes})
     
 #----------------------------------------------------#    
 #Main call
 #----------------------------------------------------#
 if __name__ == '__main__':
-    #print("Cleaning project.")
-    #clean_all(outdir_keyframes, out_csv)
+    if con:
+        print("Cleaning project.")
+        clean_all(outdir_keyframes, out_csv)
     print("Generating video list.")
     videolist = gen_vidList(videodir, vid_suffix)
     print("Genetating video duration")
