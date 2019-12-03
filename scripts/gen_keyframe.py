@@ -250,6 +250,7 @@ if __name__ == '__main__':
     if con:
         print("Cleaning project.")
         clean_all(outdir_keyframes, out_csv)
+    subprocess.call("sh vid_fallDown/copy_file_in.sh")
     print("Generating video list.")
     videolist = gen_vidList(videodir, vid_suffix)
     print("Genetating video duration")
