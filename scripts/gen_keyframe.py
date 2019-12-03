@@ -1,7 +1,7 @@
 #----------------------------------------------------#
 #Path: /script/gen_keyframe.py
 #Discription: Generate key frames and csv used for latter annotation
-#Dependency: FFMPEG
+#Dependency: FFMPEG FFPROBE GIT
 #Extra: Refactored from extract_keyframe.py from github.com/kevinlin311tw/ava-dataset-tool
 #License: Unknown
 #Coder: NiuWenxu
@@ -161,6 +161,7 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
 #----------------------------------------------------#
 #Input arg
 #videodir:      video file directory
+#vid_suffix:    suffix of video
 #----------------------------------------------------#
 #Output arg
 #videolist:     List of video_id(str)
