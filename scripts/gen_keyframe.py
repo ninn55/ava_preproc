@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 #input Video path ./vid_fallDown
 parser.add_argument("--video_dir", default="./vid_fallDown", help="Videos source path.")
 parser.add_argument("--output_dir", default="./preproc_fallDown", help="Output directory.")
-parser.add_argument("--clean", default="", help="Clen directory or not.")
+parser.add_argument("--clean", default="", help="Clean directory or not.")
 
 FLAGS = parser.parse_args()
 
@@ -240,7 +240,7 @@ def _supermakedirs(path, mode):
 #----------------------------------------------------#
 def clean_all(outdir_keyframes: str, out_csv: str):
     warnings.warn("CLEANING CAUTION")
-    error = subprocess.call("git clean -fx")
+    error = subprocess.call("git clean -fx", shell = True)
     error = subprocess.call("rm -r %(outdir_keyframes)s"% {"outdir_keyframes": outdir_keyframes})
     
 #----------------------------------------------------#    

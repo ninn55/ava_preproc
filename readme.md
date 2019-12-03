@@ -12,8 +12,11 @@ git clone /home/wniu/ava_data_preproc/
 
 在根目录下，
 ```
-sh vid_fallDown/copy_file_in.sh
 python3 scripts/gen_keyframe.py
+```
+使用方法见
+```
+python3 scripts/gen_keyframe.py --help
 ```
 根据AVA的定义，关键帧为真实标注的帧。在AVA中从第15分钟开始每间隔1秒取1帧，总共标注15分钟。
 由于提供数据的时长，此处将视频从头到尾间隔1秒标注，舍弃第1帧与最后1帧。
