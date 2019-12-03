@@ -241,7 +241,7 @@ def _supermakedirs(path, mode):
 def clean_all(outdir_keyframes: str, out_csv: str):
     warnings.warn("CLEANING CAUTION")
     error = subprocess.call("git clean -fx", shell = True)
-    error = subprocess.call("rm -r %(outdir_keyframes)s"% {"outdir_keyframes": outdir_keyframes}, shell = True)
+    error = subprocess.call("rm -r %(outdir_keyframes)s/"% {"outdir_keyframes": outdir_keyframes}, shell = True)
     
 #----------------------------------------------------#    
 #Main call
