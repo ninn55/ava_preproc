@@ -78,7 +78,7 @@ def get_keyframe(videofile: str, video_id: str, time_id: str, outdir_keyframes: 
     return outpath
 
 #----------------------------------------------------#
-#Write key frame
+#Write key frames
 #----------------------------------------------------#
 #Input arg
 #videodir           |  video file directory

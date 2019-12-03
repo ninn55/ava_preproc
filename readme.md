@@ -23,7 +23,19 @@ python3 scripts/gen_keyframe.py --help
 
 关键帧的位置为`/ava_data_preproc/preproc_fallDown/keyframes/video_id/frame_count.jpg`
 
-## 生成clip
+## 生成clips
+
+在根目录下，
+```
+python3 scripts/gen_clip.py
+```
+使用方法见
+```
+python3 scripts/gen_clip.py --help
+```
+clips的位置为`/ava_data_preproc/preproc_fallDown/clips/video_id/frame_count.mp4`
+
+## Dataturks
 
 
 
