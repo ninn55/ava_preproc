@@ -140,7 +140,7 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
     #Write List to csv file
     if writeindex:
         #File exist check        
-        wcode = subprocess.call("ls %s*"% out_csv, shell = True)
+        wcode = subprocess.call("ls %s*"% out_csv, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if wcode == 0:
             warnings.warn("WARNING csv file already exist, not generate.")
             return List
