@@ -34,7 +34,7 @@ outdir_keyframes = os.path.join(outdir, "keyframes")
 out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")
 
 #Video suffix, default mp4
-vid_suffix = "mp4"
+vid_suffix = ".mp4"
 #Frame interval in seconds
 interval = 1
 
@@ -55,18 +55,22 @@ def get_keyframe(videofile: str, video_id: str, time_id: str, outdir_keyframes: 
     outdir_folder = os.path.join(outdir_keyframes, video_id)
     mkdir_p(outdir_folder)
     outpath = os.path.join(outdir_folder, '%d.jpg' % (int(time_id)))
-    #First remove potentially already generated key frame
-    ffmpeg_command = 'rm %(outpath)s; \
-                      ffmpeg -ss %(timestamp)f -i %(videopath)s \
-                      -frames:v 1 %(outpath)s' % {
+    werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    #werror = 1
+    if werror != 0:
+        #generat ungenerated key frames
+        ffmpeg_command = 'ffmpeg -hide_banner -loglevel panic -ss %(timestamp)f -i %(videopath)s \
+                          -frames:v 1 %(outpath)s' % {
                           'timestamp': float(time_id),
                           'videopath': videofile,
                           'outpath': outpath}
-
-    code = subprocess.call(ffmpeg_command, shell=True)
-    #Add exit code check
-    if code != 0:
-        sys.exit("ERROR ffmpeg write frame fail. CODE %(error)s" % {"error": code})
+        print(ffmpeg_command)
+        code = subprocess.call(ffmpeg_command, shell=True)
+        #Add exit code check
+        if code != 0:
+            sys.exit("ERROR ffmpeg write frame fail. CODE %(error)s" % {"error": code})
+    else:
+        warnings.warn("WARNING. Frame file already exist.")
     return outpath
 
 #----------------------------------------------------#
@@ -85,7 +89,7 @@ def get_keyframe(videofile: str, video_id: str, time_id: str, outdir_keyframes: 
 def write_keyframe(videodir: str, frameloc: list, vid_suffix: str, usecsv: bool, outdir_keyframes: str, out_csv: str):
     #Input check
     if usecsv: 
-        wcode = subprocess.call("ls %s*"% out_csv, shell = True)
+        wcode = subprocess.call("ls %s*"% out_csv, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if wcode != 0:
             sys.exit("ERROR csv file in %(csv)s donot exist. CODE $(error)s"% {"csv": out_csv, "error": wcode})
     else:
@@ -124,14 +128,13 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
         sys.exit("ERROR inner logic error. CODE 2")
     if len(videolist) == 0 or len(vidduration) == 0:
         sys.exit("ERROR directory donnot contain any video. CODE 3")
-
     List = []
     for i in videolist:
         video_id = i[0] #String
         duration = vidduration[video_id] #Int
         #Discard first and last frame
         for j in range(1, duration, interval):
-            temp = [video_id, str(duration)]
+            temp = [video_id, str(j)]
             List.append(temp)
     
     #Write List to csv file
@@ -142,11 +145,10 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
             warnings.warn("WARNING csv file already exist, not generate.")
             return List
         #Open and write file
-        with open(out_csv, 'xw') as filecsv:
+        with open(out_csv, 'w') as filecsv:
             wr = csv.writer(filecsv)
             for i in List:
                 wr.writerow(i)
-
     return List
             
     
@@ -159,17 +161,19 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
 #Output arg
 #videolist:     List of video_id(str)
 #----------------------------------------------------#
-def gen_vidList(videodir: str) -> list: 
+def gen_vidList(videodir: str, vid_suffix: str) -> list: 
     # Auto exit check
     videos = subprocess.check_output("ls %(videodir)s" %{"videodir": videodir}, shell=True)
     #Last item in list is ""
-    videos = videos.split('\n').pop()
+    videos = videos.decode('utf8')
+    videos = videos.split('\n')
     List = []
-    for i in video:
+    for i in videos:
         temp = []
-        #no suffix needed
-        temp.append(i.split(".")[0])
-        List.append(temp)
+        if i.endswith(vid_suffix):
+            #no suffix needed
+            temp.append(i.split(".")[0])
+            List.append(temp)
     return List
 
 #----------------------------------------------------#
@@ -187,11 +191,10 @@ def gen_vidduration(videodir: str, videolist: list, vid_suffix: str) -> dict:
     dic = {}
     for i in videolist:
         video_id = i[0]
-        ffprobe_command = "ffprobe -i %(videodir)s%(video_id)s%(vid_suffix)s \
+        videofile = os.path.join(videodir, "%(video_id)s%(suf)s"%{"video_id": video_id, "suf": vid_suffix})
+        ffprobe_command = "ffprobe -i %(videofile)s \
                             -show_format -v quiet | grep duration" % {
-                                "videodir": videodir, 
-                                "video_id": video_id, 
-                                "vid_suffix": vid_suffix}
+                                "videofile": videofile}
         # Auto exit check        
         temp = subprocess.check_output(ffprobe_command, shell = True).decode("utf8")
         temp = temp.split('=')[1]
@@ -201,7 +204,23 @@ def gen_vidduration(videodir: str, videolist: list, vid_suffix: str) -> dict:
         else:
             dic[video_id] = duration
     return dic
-            
+
+def mkdir_p(path):
+    try:
+        _supermakedirs(path, 0o775) # Supporting Python 2 & 3
+    except OSError: # Python >2.5
+        pass          
+
+def _supermakedirs(path, mode):
+    if not path or os.path.exists(path):
+        return []
+    (head, _) = os.path.split(path)
+    res = _supermakedirs(head, mode)
+    os.mkdir(path)
+    os.chmod(path, mode)
+    res += [path]
+    return res
+
 #----------------------------------------------------#
 #Clean up key frames and CSV files generated by this script
 #----------------------------------------------------#
@@ -221,12 +240,10 @@ if __name__ == '__main__':
     #print("Cleaning project.")
     #clean_all(outdir_keyframes, out_csv)
     print("Generating video list.")
-    videolist = gen_vidList(videodir)
+    videolist = gen_vidList(videodir, vid_suffix)
     print("Genetating video duration")
     vidduration = gen_vidduration(videodir, videolist, vid_suffix)
     print("Generating CSV file.")
     frameloc = gen_basecsv(videodir, videolist, vidduration, True, interval, out_csv)
     print("Generating keyframes")
     write_keyframe(videodir, frameloc, vid_suffix, False, outdir_keyframes, out_csv)
-    
-    
