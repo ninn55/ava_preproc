@@ -218,8 +218,8 @@ def clean_all(outdir_keyframes: str, out_csv: str):
 #Main call
 #----------------------------------------------------#
 if __name__ == '__main__':
-    print("Cleaning project.")
-    clean_all(outdir_keyframes, out_csv)
+    #print("Cleaning project.")
+    #clean_all(outdir_keyframes, out_csv)
     print("Generating video list.")
     videolist = gen_vidList(videodir)
     print("Genetating video duration")
