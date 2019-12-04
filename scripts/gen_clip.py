@@ -110,7 +110,8 @@ def write_clips(frameloc:list, usecsv: bool, out_csv: str, vid_suffix: str, vidd
 #----------------------------------------------------#
 def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, outdir_clips: str):
     #Input check
-    print(int(vidduration[video_id]) - int(time_id))
+    #Debug
+    #print(int(vidduration[video_id]) - int(time_id))
     if int(vidduration[video_id]) - int(time_id) <= (clip_length + clip_time_padding):
         warnings.warn("Clip too long for video file.")
         return
@@ -121,7 +122,7 @@ def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, ou
     if clip_start < 0:
         clip_start = 0
     clip_end = float(int(time_id)) + float(clip_length) / 2
-    outpath_clip = os.path.join(outdir_folder, '%d.%s' % (int(time_id), vid_suffix))
+    outpath_clip = os.path.join(outdir_folder, '%d%s' % (int(time_id), vid_suffix))
 
     werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath_clip}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     #werror = 1
