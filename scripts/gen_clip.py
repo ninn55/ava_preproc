@@ -123,7 +123,7 @@ def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, ou
     clip_end = float(int(time_id)) + float(clip_length) / 2
     outpath_clip = os.path.join(outdir_folder, '%d.%s' % (int(time_id), vid_suffix))
 
-    werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath_clip}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     #werror = 1
     if werror != 0:
         #Generate clips
