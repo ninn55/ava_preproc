@@ -3,6 +3,8 @@ import json
 import csv
 import warnings
 import sys
+import subprocess
+import copy
 
 #Parse command line argument
 parser = argparse.ArgumentParser()
@@ -28,7 +30,7 @@ def read_csv() -> dict:
     with open(annot_file, 'r') as f:
         dic = {}
         reader = list(csv.reader(f))
-        for i in range(len(reader):
+        for i in range(len(reader)):
             temp = (i[0], i[1])
             if temp in dic.keys():
                 warnings.warn("WARNING. Keys %(temp)s already parsed."%{"temp": temp})
@@ -45,12 +47,11 @@ def write_csv(Lst: list):
         werror = subprocess.call("rm -f %(txtfile)s"%{"txtfile": annot_file}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if werror != 0:
             sys.exit("ERROR. File %(txtfile)s removal failed. Please remove manully"%{"txtfile": annot_file})
-        
-        #Open and write file
-        with open(annot_file, 'w') as filecsv:
-            wr = csv.writer(filecsv)
-            for i in Lst:
-                wr.writerow(i)
+    #Open and write file
+    with open(annot_file, 'w') as filecsv:
+        wr = csv.writer(filecsv)
+        for i in Lst:
+            wr.writerow(i)
 
 #----------------------------------------------------#
 #Read json and output essential info in a list
@@ -61,7 +62,7 @@ def read_json() -> list:
         outlst = []
         while 1:
             temp = f.readline()
-            if temp = "":
+            if temp == "":
                 break
             temp = json.loads(temp)
             if not temp["content"].endswith(img_suffix):
@@ -70,12 +71,21 @@ def read_json() -> list:
             video_id = sub_dir
             time_id = kf.split('.')[0]
             if temp["metadata"]["evaluation"] != 'CORRECT':
-                warning.warn("WARNING. %(video_id)s %(time_id)s is not evaluated" % ("video_id": video_id, "time_id": time_id))
+                warning.warn("WARNING. %(video_id)s %(time_id)s is not evaluated" % {"video_id": video_id, "time_id": time_id})
             for j in temp["annotation"]:
-                lst = [j["points"][0][0], j["points"][0][1], j["points"][2][0], j["points"][2][1]]
+                lst1 = []
+                lst1.append(video_id)
+                lst1.append(time_id)
+                lst1.append(j["points"][0][0])
+                lst1.append(j["points"][0][1])
+                lst1.append(j["points"][2][0])
+                lst1.append(j["points"][2][1])
                 for i in j["label"]:
-                    lst.append(i)
-                    outlst.append(lst)
+                    lst1.append(i)
+                    #print(lst1)
+                    outlst.append(copy.deepcopy(lst1))
+                    lst1.pop()
+    #print(outlst)
     return outlst
 
 #----------------------------------------------------#
