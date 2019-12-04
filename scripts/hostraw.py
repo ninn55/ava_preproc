@@ -59,12 +59,12 @@ def gen_txt():
     txtfile = "%(txt_name)s%(txt_suffix)s" % {"txt_suffix": txt_suffix, "txt_name": txt_name}
 
     #Delete existing txt file
-    werror = subprocess,call("ls %(txtfile)s*"%{"txtfile": txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    werror = subprocess.call("ls %(txtfile)s*"%{"txtfile": txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     if werror == 0:
         warnings.warn("WARNING. File %(txtfile)s exist, remove first."%{"txtfile": txtfile})
-        werror = subprocess.call("rm -f %(txtfile)s"%{"txtfile": txtfile})
+        werror = subprocess.call("rm -f %(txtfile)s"%{"txtfile": txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if werror != 0:
-            sys.exit("ERROR. File %(txtfile)s removal failed. Please remove manully"%{"txtfile": txtfile}))
+            sys.exit("ERROR. File %(txtfile)s removal failed. Please remove manully"%{"txtfile": txtfile})
 
     #Generate txt file
     with open(txtfile, 'w') as f:
@@ -86,10 +86,10 @@ if __name__ == '__main__':
 
     print("Start http server.")
     Handler = http.server.SimpleHTTPRequestHandler
-    httpd = socketserver.TCPServer(("", PORT), Handler)
+    httpd = socketserver.TCPServer(("", int(PORT)), Handler)
     print("Serving at port %(port)s. In %(dir)s"%{"port": PORT, "dir": os.path.join(keyframedir, subdir)})
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
-    httpd:server_close()
+    httpd.server_close()
