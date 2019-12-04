@@ -3,9 +3,13 @@
 AVA数据集标注及预处理完整工具链。
 
 ## Repo clone方法：
+在10.0.14.49上：
+```
+git clone /home/wniu/ava_data_preproc/
+```
+不在服务器上
 ```
 git clone ssh://root@10.0.14.49/home/wniu/ava_data_preproc/
-git clone /home/wniu/ava_data_preproc/
 ```
 
 ## 关键帧提取
