@@ -1,8 +1,11 @@
-import json
+import argparse
+import os
+import csv
+from gen_keyframe import mkdir_p
 import cv2
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--annot_file", default="./preproc_fallDown/ava_v1.0_extend.csv",
+parser.add_argument("--annot_file", default="./preproc_fallDown/ava_v1.0_extend_annot.csv",
                     help="Anotation file path.")
 parser.add_argument("--actionlist_file",
                     default="./preproc_fallDown/ava_action_list_v2.0.csv",
@@ -52,6 +55,7 @@ def load_labels(annotations):
 #Recycled from ava-dataset-tool by kevinlin311tw
 #----------------------------------------------------#
 def visual_bbox(anno_data, action_name, keyfname, video_id, time_id, bbox_ids):
+    print(anno_data)
     frame = cv2.imread(keyfname)
     frame_height, frame_width, channels = frame.shape
     outdir_folder = os.path.join(outdir_bboxs, video_id)
@@ -88,4 +92,4 @@ def gen_bbox():
         visual_bbox(anno_data, action_name, fname, video_id, time_id, bbox_ids)
 
 if __name__ == '__main__':
-    gen_bbox():
+    gen_bbox()
