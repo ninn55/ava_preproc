@@ -39,9 +39,23 @@ python3 scripts/gen_clip.py --help
 ```
 clips的位置为`/ava_data_preproc/preproc_fallDown/clips/video_id/frame_count.mp4`
 
+## Host img
+
+No extra dependancies. Run directly.
+
+* `python3 ./scripts/hostraw.py --sub_dir <video_id> -- port <open_port>`
+
+* `sudo netstat -lntup | grep "<port_number>"`
+
 ## Dataturks
 
+见`./doc/dataturks.md`
 
+## 输出转码
+
+`python3 ./scripts/parsejson.py --sub_dir <video_id> --json_file  <output dir>`
+
+## 
 
 注:
 * Bare git repo 位置: `ssh://root@10.0.14.49/home/wniu/ava_data_preproc/`

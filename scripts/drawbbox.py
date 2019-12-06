@@ -1,15 +1,30 @@
+#----------------------------------------------------#
+#Path: /script/gen_keyframe.py
+#Discription: Render bbox on key frames
+#Dependency: opencv
+#Extra: Refactored from extract_keyframe.py from github.com/kevinlin311tw/ava-dataset-tool
+#License: Unknown
+#Coder: NiuWenxu
+#Contact: wniu@connect.ust.hk
+#----------------------------------------------------#
+
+#Imports
 import argparse
 import os
 import csv
 from gen_keyframe import mkdir_p
 import cv2
 
+#Parse command line argument
 parser = argparse.ArgumentParser()
+#Anotation file
 parser.add_argument("--annot_file", default="./preproc_fallDown/ava_v1.0_extend_annot.csv",
                     help="Anotation file path.")
+#Labels
 parser.add_argument("--actionlist_file",
                     default="./preproc_fallDown/ava_action_list_v2.0.csv",
                     help="Action list file path.")
+#Output dir
 parser.add_argument("--output_dir", default="./preproc_fallDown", help="Output directory.")
 
 FLAGS = parser.parse_args()
@@ -18,8 +33,9 @@ annotfile = FLAGS.annot_file
 actionlistfile = FLAGS.actionlist_file
 outdir = FLAGS.output_dir
 
-outdir_clips = os.path.join(outdir, "clips")
+#keyframes dir
 outdir_keyframes = os.path.join(outdir, "keyframes")
+# bbox output dir
 outdir_bboxs = os.path.join(outdir, "bboxs")
 
 #----------------------------------------------------#
@@ -80,6 +96,9 @@ def visual_bbox(anno_data, action_name, keyfname, video_id, time_id, bbox_ids):
         draw_dic[pt_to_draw] = True
     cv2.imwrite(outpath, frame) 
 
+#----------------------------------------------------#
+#Render on bbox
+#----------------------------------------------------#
 def gen_bbox():
     anno_data, table = load_labels(annotfile)
     action_name = load_action_name(actionlistfile) 
@@ -91,5 +110,8 @@ def gen_bbox():
         fname = os.path.join(outdir_folder, '%d.jpg' % (int(time_id)))
         visual_bbox(anno_data, action_name, fname, video_id, time_id, bbox_ids)
 
+#----------------------------------------------------#    
+#Main call
+#----------------------------------------------------#
 if __name__ == '__main__':
     gen_bbox()
