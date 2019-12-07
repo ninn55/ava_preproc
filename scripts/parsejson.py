@@ -12,13 +12,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--annot_file", default="./preproc_fallDown/ava_v1.0_extend_annot.csv", help="Anotation file path.")
 parser.add_argument("--json_file", default="./demo/demo_out.json", help="Json file path.")
 #Image file sub dir
-parser.add_argument("--sub_dir", default="fall1", help="Subdirectory.")
+#parser.add_argument("--sub_dir", default="fall1", help="Subdirectory.")
 
 FLAGS = parser.parse_args()
 
 annot_file = FLAGS.annot_file
 json_file = FLAGS.json_file
-sub_dir = FLAGS.sub_dir
+#sub_dir = FLAGS.sub_dir
 
 img_suffix = ".jpg"
 
@@ -68,7 +68,7 @@ def read_json() -> list:
             if not temp["content"].endswith(img_suffix):
                 sys.exit("ERROR. %(file)s is not a image."%{"file": temp})
             kf = temp["content"].split('/')[-1]
-            video_id = sub_dir
+            video_id = temp["content"].split('/')[-2]
             time_id = kf.split('.')[0]
             if temp["metadata"]["evaluation"] != 'CORRECT':
                 warning.warn("WARNING. %(video_id)s %(time_id)s is not evaluated" % {"video_id": video_id, "time_id": time_id})

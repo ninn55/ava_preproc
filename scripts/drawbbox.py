@@ -71,7 +71,7 @@ def load_labels(annotations):
 #Recycled from ava-dataset-tool by kevinlin311tw
 #----------------------------------------------------#
 def visual_bbox(anno_data, action_name, keyfname, video_id, time_id, bbox_ids):
-    print(anno_data)
+    #print(anno_data)
     frame = cv2.imread(keyfname)
     frame_height, frame_width, channels = frame.shape
     outdir_folder = os.path.join(outdir_bboxs, video_id)
