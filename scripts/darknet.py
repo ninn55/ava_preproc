@@ -161,7 +161,7 @@ def classify(net, meta, im):
     return res
 
 def detect(net, meta, image, thresh=.5, hier_thresh=.5, nms=.45):
-    im = load_image(image, 0, 0)
+    im = load_image(image.encode("ascii"), 0, 0)
     num = c_int(0)
     pnum = pointer(num)
     predict_image(net, im)
@@ -245,7 +245,7 @@ def wirteDetect(net, meta):
             ftxt.write(str + "\n")
 
 if __name__ == "__main__":
-    net = load_net("../darknet/cfg/tiny-yolo.cfg", "../darknet/tiny-yolo.weights", 0)
+    net = load_net("../darknet/cfg/tiny-yolo.cfg".encode("ascii"), "../darknet/tiny-yolo.weights".encode("ascii"), 0)
     meta = load_meta("../darknet/cfg/coco.data")
     wirteDetect(net, meta)
 
