@@ -186,48 +186,55 @@ def wirteDetect(net, meta):
     resultlst = []
     for i in ls:
         temp = []
-        vidoe_id = i[0]
+        video_id = i[0]
         time_id = i[1]
-        #if vidoe_id != sub_dir:
+        print("Processing %(video_id)s %(time_id)s"%{"video_id":video_id, "time_id":time_id})
+        #if video_id != sub_dir:
         #    continue
-        fl = os.path.join(outdir_keyframes, vidoe_id)
+        fl = os.path.join(outdir_keyframes, video_id)
         fl = os.path.join(fl, "%(time_id)s%(suffix)s"%{"time_id": time_id, "suffix": img_suffix})
-        result = detect(net, meta, fl)
-        result = result.replace("(", "[").replace(")", "]").replace("'", "\"")
+        #print(fl)
+        result = str(detect(net, meta, fl))
+        result = result.replace("(", "[").replace(")", "]").replace("'", "\"").replace('b"', '"')
+        #print(result)
         result = json.loads(result)
-        temp.append(vidoe_id)
+        temp.append(video_id)
         temp.append(time_id)
-        im = cv2.imread(fl)
+        im = imread(fl)
         width, height, _ = im.shape
         temp0 = []
         for j in result:
             if j[1] < 0.5:
-                warnings.warn("WARNING. %(vidoe_id)s %(time_id)s bbox %(bbox)s is not qualified"%{
-                                            "vidoe_id": vidoe_id, 
+                warnings.warn("WARNING. %(video_id)s %(time_id)s bbox %(bbox)s is not qualified"%{
+                                            "video_id": video_id, 
                                             "time_id": time_id, 
                                             "bbox": j[0]})
             temp1 = []
-            temp1.append(i[2][0] / width)
-            temp1.append(i[2][1] / height)
+            temp1.append(j[2][0] / width)
+            temp1.append(j[2][1] / height)
             temp0.append(temp1)
             temp2 = []
-            temp2.append((i[2][2] + i[2][0]) / width)
-            temp2.append((i[2][3] + i[2][1]) / height)
+            temp2.append((j[2][2] + j[2][0]) / width)
+            temp2.append((j[2][3] + j[2][1]) / height)
             temp0.append(temp2)
         temp.append(temp0)
+        #print(temp)
+        resultlst.append(temp)
 
-    for i in temp:
-        vidoe_id = i[0]
+    for i in resultlst:
+        video_id = i[0]
         time_id = i[1]
+        print("Parse %(video_id)s %(time_id)s"%{"video_id":video_id, "time_id":time_id})
         url = "http://%(ip)s:%(port)s/%(video_id)s/%(time_id)s%(suffix)s"%{
                                             "ip" : ip,
                                             "port": PORT,
                                             "video_id": video_id,
                                             "time_id": time_id,
                                             "suffix": img_suffix}
-        fl = os.path.join(outdir_keyframes, vidoe_id)
+        fl = os.path.join(outdir_keyframes, video_id)
         fl = os.path.join(fl, "%(time_id)s%(suffix)s"%{"time_id": time_id, "suffix": img_suffix})
-        im = cv2.imread(fl)
+        #print(fl)
+        im = imread(fl)
         width, height, _ = im.shape
         dict = {}
         dict["content"] = url
@@ -241,9 +248,10 @@ def wirteDetect(net, meta):
         dict1["points"] = i[2]
 
         dict["annotation"].append(dict1)
+        #print(dict)
         with open(outdir_preannotxt, "a") as ftxt:
-            str = json.dumps(dict)
-            ftxt.write(str + "\n")
+            str1 = json.dumps(dict)
+            ftxt.write(str1 + "\n")
 
 if __name__ == "__main__":
     net = load_net("../darknet/cfg/yolov2.cfg".encode("ascii"), "../darknet/weight/yolov2.weights".encode("ascii"), 0)
