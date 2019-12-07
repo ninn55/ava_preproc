@@ -30,8 +30,8 @@ def read_csv(fl) -> set:
     with open(fl, 'r') as f:
         dic = set()
         reader = list(csv.reader(f))
-        for i in range(len(reader)):
-            temp = [i[0], i[1]]
+        for i in reader:
+            temp = (i[0], i[1])
             if temp in dic:
                 warnings.warn("WARNING. Keys %(temp)s already parsed."%{"temp": temp})
             dic.add(temp)

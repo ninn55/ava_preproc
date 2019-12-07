@@ -31,10 +31,11 @@ parser.add_argument("--out_dir", default="./preproc_fallDown", help="Output dir.
 FLAGS = parser.parse_args()
 
 PORT = FLAGS.port
-outdir = FLAGS.frame_dir
+outdir = FLAGS.out_dir
 #subdir = FLAGS.sub_dir
 
 keyframedir = os.path.join(outdir, "keyframes")
+csvfile = os.path.join(outdir, "ava_v1.0_extend.csv")
 
 #Preset argu
 txt_suffix = ".txt"
@@ -54,15 +55,15 @@ def check_port():
 #Generate txt file for dataturks
 #----------------------------------------------------#
 def gen_txt_v2():
-    dic = read_csv()
+    dic = read_csv(csvfile)
     txtfile = "%(txt_name)s%(txt_suffix)s" % {"txt_suffix": txt_suffix, "txt_name": txt_name}
     txtfile = os.path.join(outdir, txtfile)
-    codeerror = subprocess.call("ls %(txtfile)s*"% "txtfile":txtfile, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    codeerror = subprocess.call("ls %(txtfile)s*"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     if codeerror == 0:
-        warnings.warn("WARNING. %(txtfile)s already exist remove first"% "txtfile":txtfile)
-        codeerror = subprocess.call("rm -f %(txtfile)s"% "txtfile":txtfile, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+        warnings.warn("WARNING. %(txtfile)s already exist remove first"% {"txtfile":txtfile})
+        codeerror = subprocess.call("rm -f %(txtfile)s"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if codeerror != 0:
-            sys,exit("ERROR.%(txtfile)s remove failed."% "txtfile":txtfile, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+            sys,exit("ERROR.%(txtfile)s remove failed."% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
 
     for i in dic:
         video_id = i[0]
@@ -105,11 +106,12 @@ def gen_txt():
 #Main call
 #----------------------------------------------------#
 if __name__ == '__main__':
+    print("Gen txt file")
+    gen_txt_v2()
+
     print("Checking port.")
     check_port()
     os.chdir(keyframedir)
-    print("Gen txt file")
-    gen_txt_v2()
 
     print("Start http server.")
     Handler = http.server.SimpleHTTPRequestHandler
