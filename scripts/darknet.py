@@ -20,7 +20,7 @@ import warnings
 #Parse command line argument
 parser = argparse.ArgumentParser()
 parser.add_argument("--output_dir", default="./preproc_fallDown", help="Output directory.")
-parser.add_argument("--sub_dir", default="fall1", help="Subdirectory.")
+#parser.add_argument("--sub_dir", default="fall1", help="Subdirectory.")
 #User input port number.
 parser.add_argument("--port", default="10800", help="Opened port number to hosted files.")
 
@@ -28,11 +28,11 @@ FLAGS = parser.parse_args()
 
 outdir = FLAGS.output_dir
 PORT = FLAGS.port
-sub_dir = FLAGS.sub_dir
+#sub_dir = FLAGS.sub_dir
 
 #Keyframe output path ./preproc_fallDown/keyframes
 outdir_keyframes = os.path.join(outdir, "keyframes")
-outdir_preannotxt = os.path.join(outdir, "%(sub)s.txt"%{"sub": sub_dir})
+outdir_preannotxt = os.path.join(outdir, "ava_preannot.json")
 #Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
 out_csv = os.path.join(outdir, "ava_v1.0_extend.csv)"
 
@@ -187,8 +187,8 @@ def wirteDetect(net, meta):
         temp = []
         vidoe_id = i[0]
         time_id = i[1]
-        if vidoe_id != sub_dir:
-            continue
+        #if vidoe_id != sub_dir:
+        #    continue
         fl = os.path.join(outdir_keyframes, vidoe_id)
         fl = os.path.join(fl, "%(time_id)s%(suffix)s"%{"time_id": time_id, "suffix": img_suffix})
         result = detect(net, meta, fl)
