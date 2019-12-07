@@ -16,6 +16,7 @@ from parsejson import read_csv
 import json
 from cv2 import imread
 import warnings
+import os
 
 #Parse command line argument
 parser = argparse.ArgumentParser()
@@ -34,7 +35,7 @@ PORT = FLAGS.port
 outdir_keyframes = os.path.join(outdir, "keyframes")
 outdir_preannotxt = os.path.join(outdir, "ava_preannot.json")
 #Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
-out_csv = os.path.join(outdir, "ava_v1.0_extend.csv)"
+out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")
 
 img_suffix = ".jpg"
 ip = "10.0.14.49"
@@ -245,8 +246,8 @@ def wirteDetect(net, meta):
             ftxt.write(str + "\n")
 
 if __name__ == "__main__":
-    net = load_net("../darknet/cfg/tiny-yolo.cfg".encode("ascii"), "../darknet/tiny-yolo.weights".encode("ascii"), 0)
-    meta = load_meta("../darknet/cfg/coco.data")
+    net = load_net("../darknet/cfg/yolov2.cfg".encode("ascii"), "../darknet/weight/yolov2.weights".encode("ascii"), 0)
+    meta = load_meta("../darknet/cfg/coco.data".encode("ascii"))
     wirteDetect(net, meta)
 
     
