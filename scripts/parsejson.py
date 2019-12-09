@@ -71,9 +71,9 @@ def read_json() -> list:
             video_id = temp["content"].split('/')[-2]
             time_id = kf.split('.')[0]
             if temp["metadata"]["evaluation"] != 'CORRECT':
-                warning.warn("WARNING. %(video_id)s %(time_id)s is not evaluated" % {"video_id": video_id, "time_id": time_id})
+                warnings.warn("WARNING. %(video_id)s %(time_id)s is not evaluated" % {"video_id": video_id, "time_id": time_id})
             if temp["annotation"] == None:
-                warning.warn("WARNING. %(video_id)s %(time_id)s is skipped" % {"video_id": video_id, "time_id": time_id})
+                warnings.warn("WARNING. %(video_id)s %(time_id)s is skipped" % {"video_id": video_id, "time_id": time_id})
                 continue
             for j in temp["annotation"]:
                 lst1 = []
