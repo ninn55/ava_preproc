@@ -68,6 +68,18 @@ def load_labels(annotations):
     return reader, dic
 
 #----------------------------------------------------#
+#Draw bounding box on images
+#----------------------------------------------------#
+#Input argu
+#anno_data      |  annotation data in format of list imported from csv
+#action_name    |  labels in set import from csv
+#keyfname       |  full path of frames
+#video_id       |  Video id, file name with no extension
+#time_id        |  Count from start of the video in second
+#bbox_ids       |  Bounding box id ?
+#----------------------------------------------------#
+#No output argu
+#----------------------------------------------------#
 #Recycled from ava-dataset-tool by kevinlin311tw
 #----------------------------------------------------#
 def visual_bbox(anno_data, action_name, keyfname, video_id, time_id, bbox_ids):

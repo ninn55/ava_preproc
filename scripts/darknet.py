@@ -214,17 +214,24 @@ def wirteDetect(net, meta):
                 continue
             temp0 = [] #object
             temp1 = [] #point 1
-            temp1.append((j[2][0] - j[2][2] / 2) / width)
-            temp1.append((j[2][1] - j[2][3] / 2) / height)
+            temp1.append((j[2][0] - j[2][2] / 2) / height)
+            temp1.append((j[2][1] - j[2][3] / 2) / width)
             temp0.append(temp1)
             temp2 = [] #point 2
-            temp2.append((j[2][0] + j[2][2] / 2) / width)
-            temp2.append((j[2][1] + j[2][3] / 2) / height)
+            temp2.append((j[2][0] + j[2][2] / 2) / height)
+            temp2.append((j[2][1] + j[2][3] / 2) / width)
             temp0.append(temp2)
             temp.append(temp0)
         #print(temp)
         resultlst.append(temp)
         
+    wcode = subprocess.call("ls %s*"% outdir_preannotxt, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    if wcode == 0:
+        warnings.warn("WARNING. JSON file already exist. Remove first.")
+        werror = subprocess.call("rm -f %(txtfile)s"%{"txtfile": outdir_preannotxt}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+        if werror != 0:
+            sys.exit("ERROR. File %(txtfile)s removal failed. Please remove manully"%{"txtfile": outdir_preannotxt})
+
     for i in resultlst:
         #print(i)
         video_id = i[0]
