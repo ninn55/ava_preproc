@@ -41,11 +41,18 @@ clips的位置为`/ava_data_preproc/preproc_fallDown/clips/video_id/frame_count.
 
 ## Host img
 
-No extra dependancies. Run directly.
+只依赖于python核心包，可直接执行。
 
-* `python3 ./scripts/hostraw.py --sub_dir <video_id> -- port <open_port>`
+* `python3 ./scripts/hostraw.py -- port <open_port>`
 
 * `sudo netstat -lntup | grep "<port_number>"`
+
+注：
+
+* `nohup python3 ./scripts/hostraw.py -- port <open_port> > hostraw.log &`
+* `netstat -lntup | grep ":10800"`
+* `ps -ef | grep python`
+* `kill -9 <process_id>`
 
 ## Dataturks
 
