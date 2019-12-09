@@ -17,6 +17,7 @@ import json
 from cv2 import imread
 import warnings
 import os
+import copy
 
 #Parse command line argument
 parser = argparse.ArgumentParser()
@@ -220,8 +221,9 @@ def wirteDetect(net, meta):
             temp.append(temp0)
         #print(temp)
         resultlst.append(temp)
-
+        
     for i in resultlst:
+        #print(i)
         video_id = i[0]
         time_id = i[1]
         print("Parse %(video_id)s %(time_id)s"%{"video_id":video_id, "time_id":time_id})
@@ -242,6 +244,8 @@ def wirteDetect(net, meta):
         dict["extras"] = "null"
 
         for j in i:
+            if type(j) == str:
+                continue
             dict1 = {}#obj
             dict1["label"] = "0"
             dict1["imageWidth"] = width
@@ -250,7 +254,8 @@ def wirteDetect(net, meta):
             dict1["points"].append(j[0])
             dict1["points"].append(j[1])
 
-            dict["annotation"].append(dict1)
+            dict["annotation"].append(copy.deepcopy(dict1))
+            #print(dict["annotation"])
         
         #print(dict)
         with open(outdir_preannotxt, "a") as ftxt:
