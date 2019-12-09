@@ -209,6 +209,9 @@ def wirteDetect(net, meta):
                                             "video_id": video_id, 
                                             "time_id": time_id, 
                                             "bbox": j[0]})
+            #Screaning no human object 
+            if i[0] != 'person':
+                continue
             temp0 = [] #object
             temp1 = [] #point 1
             temp1.append((j[2][0] - j[2][2] / 2) / width)
