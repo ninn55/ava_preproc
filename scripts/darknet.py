@@ -210,20 +210,20 @@ def wirteDetect(net, meta):
                                             "time_id": time_id, 
                                             "bbox": j[0]})
             #Screaning no human object 
-            if i[0] != 'person':
+            if j[0] != 'person':
                 continue
             temp0 = [] #object
             temp1 = [] #point 1
             temp1.append((j[2][0] - j[2][2] / 2) / height)
             temp1.append((j[2][1] - j[2][3] / 2) / width)
-            temp0.append(temp1)
+            #print(temp1)
+            temp0.append(copy.deepcopy(temp1))
             temp2 = [] #point 2
             temp2.append((j[2][0] + j[2][2] / 2) / height)
             temp2.append((j[2][1] + j[2][3] / 2) / width)
-            temp0.append(temp2)
-            temp.append(temp0)
-        #print(temp)
-        resultlst.append(temp)
+            temp0.append(copy.deepcopy(temp2))
+            temp.append(copy.deepcopy(temp0))
+        resultlst.append(copy.deepcopy(temp))
         
     wcode = subprocess.call("ls %s*"% outdir_preannotxt, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     if wcode == 0:
@@ -231,7 +231,7 @@ def wirteDetect(net, meta):
         werror = subprocess.call("rm -f %(txtfile)s"%{"txtfile": outdir_preannotxt}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if werror != 0:
             sys.exit("ERROR. File %(txtfile)s removal failed. Please remove manully"%{"txtfile": outdir_preannotxt})
-
+    #print(resultlst)
     for i in resultlst:
         #print(i)
         video_id = i[0]
