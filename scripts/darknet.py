@@ -185,7 +185,7 @@ def wirteDetect(net, meta):
     ls = read_csv(out_csv)
     resultlst = []
     for i in ls:
-        temp = []
+        temp = [] #frame
         video_id = i[0]
         time_id = i[1]
         print("Processing %(video_id)s %(time_id)s"%{"video_id":video_id, "time_id":time_id})
@@ -202,22 +202,22 @@ def wirteDetect(net, meta):
         temp.append(time_id)
         im = imread(fl)
         width, height, _ = im.shape
-        temp0 = []
         for j in result:
             if j[1] < 0.5:
                 warnings.warn("WARNING. %(video_id)s %(time_id)s bbox %(bbox)s is not qualified"%{
                                             "video_id": video_id, 
                                             "time_id": time_id, 
                                             "bbox": j[0]})
-            temp1 = []
-            temp1.append(j[2][0] / height)
-            temp1.append(j[2][1] / width)
+            temp0 = [] #object
+            temp1 = [] #point 1
+            temp1.append((j[2][0] - j[2][2] / 2) / width)
+            temp1.append((j[2][1] - j[2][3] / 2) / height)
             temp0.append(temp1)
-            temp2 = []
-            temp2.append((j[2][2] + j[2][0]) / height)
-            temp2.append((j[2][3] + j[2][1]) / width)
+            temp2 = [] #point 2
+            temp2.append((j[2][0] + j[2][2] / 2) / width)
+            temp2.append((j[2][1] + j[2][3] / 2) / height)
             temp0.append(temp2)
-        temp.append(temp0)
+            temp.append(temp0)
         #print(temp)
         resultlst.append(temp)
 
@@ -236,18 +236,22 @@ def wirteDetect(net, meta):
         #print(fl)
         im = imread(fl)
         width, height, _ = im.shape
-        dict = {}
+        dict = {} #frame
         dict["content"] = url
         dict["annotation"] = []
         dict["extras"] = "null"
 
-        dict1 = {}
-        dict1["label"] = "0"
-        dict1["imageWidth"] = width
-        dict1["imageHeight"] = height
-        dict1["points"] = i[2]
+        for j in i:
+            dict1 = {}#obj
+            dict1["label"] = "0"
+            dict1["imageWidth"] = width
+            dict1["imageHeight"] = height
+            dict1["points"] = []
+            dict1["points"].append(j[0])
+            dict1["points"].append(j[1])
 
-        dict["annotation"].append(dict1)
+            dict["annotation"].append(dict1)
+        
         #print(dict)
         with open(outdir_preannotxt, "a") as ftxt:
             str1 = json.dumps(dict)
