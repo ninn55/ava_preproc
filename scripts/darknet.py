@@ -270,6 +270,8 @@ def wirteDetect(net, meta):
             dict1["points"] = []
             dict1["points"].append(j[0])
             dict1["points"].append(j[1])
+            dict1["points"].append(j[2])
+            dict1["points"].append(j[3])
 
             dict["annotation"].append(copy.deepcopy(dict1))
             #print(dict["annotation"])
