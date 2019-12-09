@@ -216,12 +216,19 @@ def wirteDetect(net, meta):
             temp1 = [] #point 1
             temp1.append((j[2][0] - j[2][2] / 2) / height)
             temp1.append((j[2][1] - j[2][3] / 2) / width)
-            #print(temp1)
             temp0.append(copy.deepcopy(temp1))
             temp2 = [] #point 2
-            temp2.append((j[2][0] + j[2][2] / 2) / height)
+            temp2.append((j[2][0] - j[2][2] / 2) / height)
             temp2.append((j[2][1] + j[2][3] / 2) / width)
             temp0.append(copy.deepcopy(temp2))
+            temp3 = [] #point 3
+            temp3.append((j[2][0] + j[2][2] / 2) / height)
+            temp3.append((j[2][1] + j[2][3] / 2) / width)
+            temp0.append(copy.deepcopy(temp3))
+            temp4 = [] #point 4
+            temp4.append((j[2][0] + j[2][2] / 2) / height)
+            temp4.append((j[2][1] - j[2][3] / 2) / width)
+            temp0.append(copy.deepcopy(temp4))
             temp.append(copy.deepcopy(temp0))
         resultlst.append(copy.deepcopy(temp))
         
