@@ -210,12 +210,12 @@ def wirteDetect(net, meta):
                                             "time_id": time_id, 
                                             "bbox": j[0]})
             temp1 = []
-            temp1.append(j[2][0] / width)
-            temp1.append(j[2][1] / height)
+            temp1.append(j[2][0] / height)
+            temp1.append(j[2][1] / width)
             temp0.append(temp1)
             temp2 = []
-            temp2.append((j[2][2] + j[2][0]) / width)
-            temp2.append((j[2][3] + j[2][1]) / height)
+            temp2.append((j[2][2] + j[2][0]) / height)
+            temp2.append((j[2][3] + j[2][1]) / width)
             temp0.append(temp2)
         temp.append(temp0)
         #print(temp)
