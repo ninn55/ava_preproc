@@ -76,6 +76,9 @@ python3 scripts/gen_clip.py
 ```
 python3 scripts/gen_clip.py --help
 ```
+
+根据ava的定义，clip位于`keyframe_time_id - clip_time_padding - clip_length / 2`与`keyframe_time_id + clip_length / 2`之间。
+
 clips的位置为`/ava_data_preproc/preproc_fallDown/clips/video_id/frame_count.mp4`
 
 ## Host img
