@@ -12,6 +12,45 @@ git clone /home/wniu/ava_data_preproc/
 git clone ssh://root@10.0.14.49/home/wniu/ava_data_preproc/
 ```
 
+## Dir 结构
+
+```
+* falldown
+    * bbox
+    * keyframes
+    * clips
+    * ...
+* ava_data_preproc
+    * scripts
+    * doc
+    * ...
+* darknet
+    * cfg
+    * data
+    * ...
+* ...
+```
+
+## 流程
+
+```
++-----------+    +-----------+   +-----------+  
+\ keyframes \    \   clips   \   \ hostrawimg\  Front 
++-----------+    +-----------+   +-----------+  
+       
+               +----------------+
+               \ pre-annotation \
+               +----------------+
+
+                 +-----------+
+                 \ dataturks \
+                 +-----------+
+
++-----------+   +-----------+   +-----------+  
+\ parsejson \   \ drawbbox  \   \  cpfile   \   Back
++-----------+   +-----------+   +-----------+  
+```
+
 ## 关键帧提取
 
 在根目录下，

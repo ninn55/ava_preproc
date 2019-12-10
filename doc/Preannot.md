@@ -4,19 +4,6 @@
 git clone https://github.com/pjreddie/darknet.git
 ```
 
-## Dir 结构
-
-```
-* ava_data_preproc
-    * scripts
-    * doc
-    * ...
-* darknet
-    * cfg
-    * data
-    * ...
-```
-
 ## 编译Darknet
 
 使用darknet yolov2进行预标注。
