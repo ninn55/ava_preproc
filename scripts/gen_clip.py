@@ -134,12 +134,10 @@ def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, ou
     #werror = 1
     if werror != 0:
         #Generate clips
-        ffmpeg_command = 'ffmpeg -hide_banner -loglevel panic -ss %(start_timestamp)s -i \
-                            %(videopath)s -g 1 -force_key_frames 0 \
-                            -t %(clip_length)d %(outpath)s' % {
+        ffmpeg_command = 'ffmpeg -hide_banner -loglevel panic -i %(videopath)s -ss %(start_timestamp)s -g 1 -force_key_frames 0 -to %(end_timestamp)s %(outpath)s' % {
                           'start_timestamp': hou_min_sec(clip_start * 1000),
-                          # 'end_timestamp': hou_min_sec(clip_end * 1000),
-                          'clip_length': clip_length + clip_time_padding,
+                          'end_timestamp': hou_min_sec(clip_end * 1000),
+                          #'clip_length': clip_length + clip_time_padding,
                           'videopath': videofile,
                           'outpath': outpath_clip}
         print(ffmpeg_command)
