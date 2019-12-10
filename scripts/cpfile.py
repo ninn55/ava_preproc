@@ -15,6 +15,7 @@ import os
 import sys
 import csv
 import warnings
+import copy
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--annot_file", default="../falldown/ava_v1.0_extend_annot.csv",
@@ -88,13 +89,15 @@ def unvalidframes(annot_csv: set) -> set:
 def delunvalid(dic: set):
     with open(annotfile, 'r') as f:
         reader = list(csv.reader(f))
+    temp = copy.deepcopy(reader)
     for i in range(len(reader)):
         if (reader[i][0], reader[i][1]) in dic:
             warnings.warn("WARNING. Delete unvlid data %(video_id)s %(time_id)s"%{"video_id": reader[i][0], "time_id": reader[i][1]})
-            del reader[i]
+            temp.remove(reader[i])
+    #print(temp)
     with open(annotfile, 'w') as f:
-        wr = csv.writer(annotfile)
-        for i in reader:
+        wr = csv.writer(f)
+        for i in temp:
             wr.writerow(i)
     print("Write successful.")
         
