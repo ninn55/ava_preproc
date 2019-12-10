@@ -112,16 +112,22 @@ def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, ou
     #Input check
     #Debug
     #print(int(vidduration[video_id]) - int(time_id))
-    if int(vidduration[video_id]) - int(time_id) <= (clip_length + clip_time_padding):
-        warnings.warn("Clip too long for video file.")
-        return
+    #if int(vidduration[video_id]) - int(time_id) <= (clip_length + clip_time_padding):
+    #    warnings.warn("Clip too long for video file.")
+    #    return
     
     outdir_folder = os.path.join(outdir_clips, video_id)
     mkdir_p(outdir_folder)
     clip_start = float(int(time_id)) - clip_time_padding - float(clip_length) / 2
     if clip_start < 0:
-        clip_start = 0
+        #clip_start = 0
+        warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
+        return
     clip_end = float(int(time_id)) + float(clip_length) / 2
+    if clip_end > vidduration[video_id]:
+        #clip_end = vidduration[video_id]
+        warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
+        return
     outpath_clip = os.path.join(outdir_folder, '%d%s' % (int(time_id), vid_suffix))
 
     werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath_clip}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
