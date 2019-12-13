@@ -18,7 +18,7 @@ sudo service docker start
 curl -o dataturks_docker.tar.gz https://s3-us-west-2.amazonaws.com/images.onprem.com.dataturks/dataturks_docker_3_3_0.tar.gz
 #pre downloaded instance on root@10.0.14.49/home/wniu/dataTurks/
 
-tar -svzf dataturks_docker.tar.gz
+tar -xvzf dataTurks_docker.tar.gz
 sudo docker load --input dataturks_docker.tar
 sudo docker run -d -p 80:80 dataturks/dataturks:3.3.0
 ```
