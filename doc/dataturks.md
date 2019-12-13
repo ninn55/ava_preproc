@@ -22,6 +22,8 @@ tar -xvzf dataTurks_docker.tar.gz
 sudo docker load --input dataturks_docker.tar
 sudo docker run -d -p 80:80 dataturks/dataturks:3.3.0
 ```
+注：端口号为<server_port>:<container_port>
+
 
 配置docker常用命令
 
