@@ -62,8 +62,8 @@ def read_csv(fl) -> set:
 #----------------------------------------------------#
 def check_vid(dir: str) -> bool:
     command  = "ffprobe %(video_dir)s" % {"video_dir": dir}
-    werror = subprocess.call(command, shell = True)
-    if werror:
+    werror = subprocess.call(command, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    if werror == 0:
         return True
     else:
         return False

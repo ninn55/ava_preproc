@@ -44,7 +44,7 @@ def gen_file(filedir: str, videodir: str):
                 "cache_file": cache_file, 
                 "vid_codec": vid_codec}
     print(command)
-    werror = subprocess.call(command, shell = True)
+    werror = subprocess.call(command, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     if werror != 0:
         sys.exit("ERROR. Decode file %(filedir)s failed."%{"filedir": filedir})
     werror = subprocess("rm -f %(filedir)s"%{"filedir": filedir}, shell = True)
@@ -83,15 +83,12 @@ def gen_vidList(videodir: str) -> list:
 #----------------------------------------------------#
 def unify_vid(List: list, videodir: str):
     for i in List:
-        gen_file(i, videodir)
+        gen_file(i[0], videodir)
 
 #----------------------------------------------------#
 #Main
 #----------------------------------------------------#
 if __name__ == '__main__':
-    if con:
-        print("Cleaning project.")
-        clean_all(outdir_keyframes, out_csv)
     subprocess.call("sh vid_fallDown/copy_file_in.sh", shell = True)
     print("Generating video list.")
     vidlist = gen_vidList(videodir)
