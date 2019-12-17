@@ -214,7 +214,8 @@ if __name__ == '__main__':
     if con:
         print("Cleaning project.")
         clean_all(outdir_keyframes, out_csv)
-    subprocess.call("sh vid_fallDown/copy_file_in.sh", shell = True)
+    bshfile = os.path.join(videodir, "copy_file_in.sh")
+    subprocess.call("sh %(bshfile)s" % {"bshfile": bshfile}, shell = True)
     print("Generating video list.")
     videolist = gen_vidList(videodir, vid_suffix)
     print("Genetating video duration")

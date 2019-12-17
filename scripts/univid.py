@@ -89,7 +89,8 @@ def unify_vid(List: list, videodir: str):
 #Main
 #----------------------------------------------------#
 if __name__ == '__main__':
-    subprocess.call("sh vid_fallDown/copy_file_in.sh", shell = True)
+    bshfile = os.path.join(videodir, "copy_file_in.sh")
+    subprocess.call("sh %(bshfile)s" % {"bshfile": bshfile}, shell = True)
     print("Generating video list.")
     vidlist = gen_vidList(videodir)
     print("Decode encode videos.")
