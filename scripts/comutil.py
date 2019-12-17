@@ -53,5 +53,8 @@ def read_csv(fl) -> set:
             dic.add(temp)
     return dic
 
+#----------------------------------------------------#    
+#Main call
+#----------------------------------------------------#
 if __name__ == '__main__':
     sys.exit("ERROR. This is a common utility file. Not run directly.")
