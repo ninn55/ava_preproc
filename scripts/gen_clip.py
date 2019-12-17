@@ -9,8 +9,7 @@
 #----------------------------------------------------#
 
 #Imports
-from gen_keyframe import gen_vidList, gen_vidduration, gen_basecsv
-from comutil import *
+from gen_keyframe import *
 
 #Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
 out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")
