@@ -47,7 +47,7 @@ def gen_file(filedir: str, videodir: str):
     werror = subprocess.call(command, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     if werror != 0:
         sys.exit("ERROR. Decode file %(filedir)s failed."%{"filedir": filedir})
-    werror = subprocess("rm -f %(filedir)s"%{"filedir": filedir}, shell = True)
+    werror = subprocess.call("rm -f %(filedir)s"%{"filedir": filedir}, shell = True)
     if werror != 0:
         warnings.warn("WARNING. Remove file %(filedir)s failed. Please remove by hand."%{"filedir": filedir})
 
