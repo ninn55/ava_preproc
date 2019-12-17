@@ -96,7 +96,9 @@ clips的位置为`/ava_data_preproc/preproc_fallDown/clips/video_id/frame_count.
 * `ps -ef | grep python`
 * `kill -9 <process_id>`
 
-## 
+## 预标注
+
+见`./doc/Preannot.md`
 
 ## Dataturks
 
