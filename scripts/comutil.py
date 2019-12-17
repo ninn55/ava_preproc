@@ -53,6 +53,21 @@ def read_csv(fl) -> set:
             dic.add(temp)
     return dic
 
+#----------------------------------------------------#
+#Check a file is video or not using ffprobe.
+#----------------------------------------------------#
+#dir: full path or relative path to a video file.
+#----------------------------------------------------#
+#True for it is video.
+#----------------------------------------------------#
+def check_vid(dir: str) -> bool:
+    command  = "ffprobe %(video_dir)s" % {"video_dir": dir}
+    werror = subprocess.call(command, shell = True)
+    if werror:
+        return True
+    else:
+        return False
+
 #----------------------------------------------------#    
 #Main call
 #----------------------------------------------------#

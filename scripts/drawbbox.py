@@ -67,7 +67,6 @@ def load_labels(annotations):
 #----------------------------------------------------#
 #Draw bounding box on images
 #----------------------------------------------------#
-#Input argu
 #anno_data      |  annotation data in format of list imported from csv
 #action_name    |  labels in set import from csv
 #keyfname       |  full path of frames

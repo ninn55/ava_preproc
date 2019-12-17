@@ -30,10 +30,8 @@ interval = 1
 #----------------------------------------------------#
 #Read generated csv 
 #----------------------------------------------------#
-#Input argu
 #out_csv    csv file path
 #----------------------------------------------------#
-#Output argu
 #frameloc    2D list containing video_id and frame location
 #----------------------------------------------------#
 def rd_basecsv(out_csv: str)->list:
@@ -45,7 +43,6 @@ def rd_basecsv(out_csv: str)->list:
 #----------------------------------------------------#
 #Write clips
 #----------------------------------------------------#
-#Input argu
 #frameloc       |  2D list containing video_id and frame location
 #usecsv         |  use csv file or input list directly
 #out_csv        |  csv file path
@@ -79,7 +76,6 @@ def write_clips(frameloc:list, usecsv: bool, out_csv: str, vid_suffix: str, vidd
 #----------------------------------------------------#
 #Write clips
 #----------------------------------------------------#
-#Input argu
 #videofile      |  Full file path 
 #video_id       |  Video id, file name with no extension
 #vidduration    |  Dictionary of video, video_id:video_duration, str:int
