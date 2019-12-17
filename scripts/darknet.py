@@ -10,13 +10,8 @@
 from ctypes import *
 import math
 import random
-import subprocess
-import argparse
-from parsejson import read_csv
-import json
+from comutil import *
 from cv2 import imread
-import warnings
-import os
 import copy
 
 #Parse command line argument

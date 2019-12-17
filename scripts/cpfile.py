@@ -7,14 +7,7 @@
 #Contact: wniu@connect.ust.hk
 #----------------------------------------------------#
 
-import subprocess
-import argparse
-from parsejson import read_csv
-from gen_keyframe import mkdir_p
-import os
-import sys
-import csv
-import warnings
+from comutil import *
 import copy
 
 parser = argparse.ArgumentParser()

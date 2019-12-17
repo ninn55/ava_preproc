@@ -11,12 +11,7 @@
 #imports
 import http.server
 import socketserver
-import os
-import warnings
-import argparse
-import subprocess
-import sys
-from parsejson import read_csv
+from comutil import *
 
 #Parse command line argument
 parser = argparse.ArgumentParser()

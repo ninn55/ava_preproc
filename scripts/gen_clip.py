@@ -9,27 +9,8 @@
 #----------------------------------------------------#
 
 #Imports
-from gen_keyframe import mkdir_p, gen_vidList, gen_vidduration, gen_basecsv
-import os
-import subprocess
-import sys
-import csv
-import warnings
-import argparse
-
-#Parse command line argument
-parser = argparse.ArgumentParser()
-#Use reletive path
-#input Video path ./vid_fallDown
-parser.add_argument("--video_dir", default="./vid_fallDown", help="Videos source path.")
-parser.add_argument("--output_dir", default="./preproc_fallDown", help="Output directory.")
-parser.add_argument("--clean", default="", help="Clean directory or not.")
-
-FLAGS = parser.parse_args()
-
-videodir = FLAGS.video_dir
-outdir = FLAGS.output_dir
-con = FLAGS.clean
+from gen_keyframe import gen_vidList, gen_vidduration, gen_basecsv
+from comutil import *
 
 #Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
 out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")

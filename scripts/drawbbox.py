@@ -9,10 +9,7 @@
 #----------------------------------------------------#
 
 #Imports
-import argparse
-import os
-import csv
-from gen_keyframe import mkdir_p
+from comutil import *
 import cv2
 
 #Parse command line argument

@@ -1,10 +1,5 @@
-import argparse
-import json
-import csv
-import warnings
-import sys
-import subprocess
 import copy
+from comutil import *
 
 #Parse command line argument
 parser = argparse.ArgumentParser()
@@ -21,21 +16,6 @@ json_file = FLAGS.json_file
 #sub_dir = FLAGS.sub_dir
 
 img_suffix = ".jpg"
-
-#----------------------------------------------------#
-#Read base CSV file and parse it to set
-#{(video_id, time_id):[]}
-#----------------------------------------------------#
-def read_csv(fl) -> set:
-    with open(fl, 'r') as f:
-        dic = set()
-        reader = list(csv.reader(f))
-        for i in reader:
-            temp = (i[0], i[1])
-            if temp in dic:
-                warnings.warn("WARNING. Keys %(temp)s already parsed."%{"temp": temp})
-            dic.add(temp)
-    return dic
 
 #----------------------------------------------------#
 #Took dictionary input and save it to csv file
