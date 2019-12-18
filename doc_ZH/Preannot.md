@@ -43,11 +43,13 @@ OPENCV = 1
     * virtual architecture使用compute_60/61/62
     * GPU feature list使用sm_60/61/62
 
+```
 ARCH= -gencode arch=compute_30,code=sm_30 \
       -gencode arch=compute_35,code=sm_35 \
       -gencode arch=compute_60,code=[sm_60,compute_60] \
       -gencode arch=compute_61,code=[sm_61,compute_61] \
       -gencode arch=compute_62,code=[sm_52,compute_62]
+```
 
 * `make`
 
@@ -56,11 +58,14 @@ ARCH= -gencode arch=compute_30,code=sm_30 \
 ## pre annotate
 
 注：
+
 将`../darknet/cfg/coco.data`中：
 ```
 names = data/coco.names
 ```
+
 变为：
+
 ```
 names = ../darknet/data/coco.names
 ```
@@ -97,5 +102,3 @@ Version: 3.4.0
 Cflags: -I$(includedir)/opencv -I$(includedir)/opencv2
 Libs: -L$(libdir) -lopencv_calib3d -lopencv_imgproc -lopencv_highgui -lopencv_core -lopencv_imgcodecs -lopencv_videoio
 ```
-
-./darknet detector test cfg/coco.data cfg/yolov2.cfg weight/yolov2.weights -dont_show <data/>train.txt > result.txt

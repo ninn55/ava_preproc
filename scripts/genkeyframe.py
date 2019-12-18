@@ -127,7 +127,13 @@ def gen_basecsv(videodir: str, videolist: list, vidduration: dict, writeindex: b
         video_id = i[0] #String
         duration = vidduration[video_id] #Int
         #Discard first and last frame
-        for j in range(1, duration, interval):
+        #Change this block if specific frames is requested.
+        #May not be global
+        start_id = 1
+        end_id = duration
+        for j in range(start_id, end_id, interval):
+            if j > duration or start_id < 0 or end_id < 0 or start_id >= end_id:
+                sys.exit("ERROR inner logic error. CODE 2")
             temp = [video_id, str(j)]
             List.append(temp)
     

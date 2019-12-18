@@ -68,6 +68,18 @@ def check_vid(dir: str) -> bool:
     else:
         return False
 
+#----------------------------------------------------#
+#Recycled from ava-dataset-tool by kevinlin311tw
+#----------------------------------------------------#
+def hou_min_sec(millis):
+    millis = int(millis)
+    seconds = (millis / 1000) % 60
+    seconds = int(seconds)
+    minutes = (millis / (1000 * 60)) % 60
+    minutes = int(minutes)
+    hours = (millis / (1000 * 60 * 60))
+    return "%d:%d:%d" % (hours, minutes, seconds)
+
 #----------------------------------------------------#    
 #Main call
 #----------------------------------------------------#
