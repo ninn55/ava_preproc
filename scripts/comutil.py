@@ -15,6 +15,8 @@ import csv
 import sys
 import warnings
 import json
+from logging import DEBUG, ERROR, INFO
+from libs.decorator import log_on_start, log_on_end, log_on_error
 
 #----------------------------------------------------#
 #Recycled from ava-dataset-tool by kevinlin311tw
@@ -84,4 +86,4 @@ def hou_min_sec(millis):
 #Main call
 #----------------------------------------------------#
 if __name__ == '__main__':
-    sys.exit("ERROR. This is a common utility file. Not run directly.")
+    sys.exit("This is a common utility file. Not run directly.")
