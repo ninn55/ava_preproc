@@ -1,7 +1,7 @@
 #----------------------------------------------------#
 #Path: /script/gen_clip.py
 #Discription: Generate video clips from csv, used for latter annotation
-#Dependency: FFMPEG
+#Dependency: FFMPEG,  Git
 #Extra: Refactored from extract_keyframe.py from github.com/kevinlin311tw/ava-dataset-tool
 #License: Unknown
 #Coder: NiuWenxu
@@ -9,36 +9,10 @@
 #----------------------------------------------------#
 
 #Imports
-from gen_keyframe import *
+from genkeyframe import *
 
-#Initial csv path ./preproc_fallDown/ava_v1.0_extend.csv
-out_csv = os.path.join(outdir, "ava_v1.0_extend.csv")
 #Clips output path ./preproc_fallDown/clips
 outdir_clips = os.path.join(outdir, "clips")
-#Change clean condition to bool
-con = bool(con)
-
-#Video suffix, default mp4
-vid_suffix = ".mp4"
-#Clip length
-clip_length = 3 # seconds
-#Clip padding
-clip_time_padding = 1.0 # seconds
-#Timr interval between key frames
-interval = 1
-
-#----------------------------------------------------#
-#Read generated csv 
-#----------------------------------------------------#
-#out_csv    csv file path
-#----------------------------------------------------#
-#frameloc    2D list containing video_id and frame location
-#----------------------------------------------------#
-def rd_basecsv(out_csv: str)->list:
-    with open(out_csv, 'r') as filecsv:
-        #overwrite input list
-        frameloc = list(csv.reader(filecsv))
-    return frameloc
 
 #----------------------------------------------------#
 #Write clips
@@ -52,26 +26,26 @@ def rd_basecsv(out_csv: str)->list:
 #----------------------------------------------------#
 #NO Output
 #----------------------------------------------------#
+@log_on_error(logging.ERROR, "CSV file '[out_csv:s]' not found.", 
+            on_exceptions = (FileNOTFound, FileExistsError), reraise = True , logger=globallogger)
 def write_clips(frameloc:list, usecsv: bool, out_csv: str, vid_suffix: str, vidduration: dict, outdir_clips: str):
     #Input check
     if usecsv: 
         wcode = subprocess.call("ls %s*"% out_csv, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         if wcode != 0:
-            sys.exit("ERROR csv file in %(csv)s donot exist. CODE $(error)s"% {"csv": out_csv, "error": wcode})
-    else:
-        if len(frameloc) == 0:
-            sys.exit("ERROR directory donnot contain any video. CODE 3")
+            #sys.exit("ERROR csv file in %(csv)s donot exist. CODE $(error)s"% {"csv": out_csv, "error": wcode})
+            raise FileNOTFound
 
     if usecsv:
         #overwrite input list
-        frameloc = rd_basecsv(out_csv)
+        frameloc = read_csv(out_csv)
 
     #Call get_clips individually
     for i in frameloc:
         video_id = i[0]
-        fl = i[1]
+        time_id = i[1]
         videofile = os.path.join(videodir, "%(video_id)s%(suf)s"%{"video_id": video_id, "suf": vid_suffix})
-        temp = get_clips(videofile, video_id, vidduration, fl, outdir_clips)
+        temp = get_clips(videofile, video_id, vidduration, time_id, outdir_clips)
 
 #----------------------------------------------------#
 #Write clips
@@ -84,28 +58,27 @@ def write_clips(frameloc:list, usecsv: bool, out_csv: str, vid_suffix: str, vidd
 #----------------------------------------------------#
 #NO Output argu
 #----------------------------------------------------#
+@log_on_error(logging.ERROR, "'[video_id:s]''[time_id:s]' clip failed to generate",
+             on_exceptions = GenFailed, reraise = True, logger=globallogger)
+@log_on_error(logging.DEBUG, "'[video_id:s]''[time_id:s]' clips too long for video",
+             on_exceptions = ExcessVideoDuration, reraise = False, logger=globallogger)
+@log_on_end(logging.INFO, "'[result:s]' Generated.", logger=globallogger)
 def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, outdir_clips: str):
-    #Input check
-    #Debug
-    #print(int(vidduration[video_id]) - int(time_id))
-    #if int(vidduration[video_id]) - int(time_id) <= (clip_length + clip_time_padding):
-    #    warnings.warn("Clip too long for video file.")
-    #    return
-    
     outdir_folder = os.path.join(outdir_clips, video_id)
     mkdir_p(outdir_folder)
+
     clip_start = float(int(time_id)) - clip_time_padding - float(clip_length) / 2
     if clip_start < 0:
         #clip_start = 0
-        warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
-        return
+        #warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
+        raise ExcessVideoDuration
     clip_end = float(int(time_id)) + float(clip_length) / 2
     if clip_end > vidduration[video_id]:
         #clip_end = vidduration[video_id]
-        warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
-        return
-    outpath_clip = os.path.join(outdir_folder, '%d%s' % (int(time_id), vid_suffix))
+        #warnings.warn("WARNING. %(video_id)s %(time_id)s clip too long for video file."%{"video_id":video_id, "time_id":time_id})
+        raise ExcessVideoDuration
 
+    outpath_clip = os.path.join(outdir_folder, '%d%s' % (int(time_id), vid_suffix))
     werror = subprocess.call("ls %(outpath)s*" % {'outpath': outpath_clip}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
     #werror = 1
     if werror != 0:
@@ -113,25 +86,31 @@ def get_clips(videofile: str, video_id: str, vidduration: dict, time_id: str, ou
         ffmpeg_command = 'ffmpeg -hide_banner -loglevel panic -i %(videopath)s -ss %(start_timestamp)s -g 1 -force_key_frames 0 -to %(end_timestamp)s %(outpath)s' % {
                           'start_timestamp': hou_min_sec(clip_start * 1000),
                           'end_timestamp': hou_min_sec(clip_end * 1000),
-                          #'clip_length': clip_length + clip_time_padding,
                           'videopath': videofile,
                           'outpath': outpath_clip}
-        print(ffmpeg_command)
-        code = subprocess.call(ffmpeg_command, shell=True)
+        #print(ffmpeg_command)
+        globallogger.log(logging.DEBUG, ffmpeg_command)
+        werror = subprocess.call(ffmpeg_command, shell=True)
         #Add exit code check
-        if code != 0:
-            sys.exit("ERROR ffmpeg write frame fail. CODE %(error)s" % {"error": code})
+        if werror != 0:
+            #sys.exit("ERROR ffmpeg write frame fail. CODE %(error)s" % {"error": code})
+            globallogger.log(logging.ERROR, "Failed code %(code)s"%{"code":str(werror)})
+            raise GenFailed
     else:
-        warnings.warn("WARNING. Frame file already exist.")
+        #warnings.warn("WARNING. Frame file already exist.")
+        globallogger.log(logging.INFO, "File %(file)s already exist. Skip."%{"file": outpath_clip})
+    return outpath_clip
 
 #----------------------------------------------------#
 #Cleanup clips generated by this script
 #----------------------------------------------------#
 #outdir_clips Clips output path
 #----------------------------------------------------#
-def clean(outdir_clips: str):
+@log_on_start(logging.WARNING, "CLEANING", logger = globallogger)
+def clean_clips(outdir_clips: str):
+    #CAUTION BEFORE CALLING
     warnings.warn("CLEANING CAUTION")
-    error = subprocess.call("rm -r %(outdir_clips)s/"% {"outdir_clips": outdir_clips}, shell = True)
+    werror = subprocess.call("rm -r %(outdir_clips)s/"% {"outdir_clips": outdir_clips}, shell = True)
 
 #----------------------------------------------------#    
 #Main call
@@ -139,7 +118,7 @@ def clean(outdir_clips: str):
 if __name__ == '__main__':
     if con:
         print("Cleaning project.")
-        clean(outdir_clips)
+        clean_clips(outdir_clips)
 
     bshfile = os.path.join(videodir, "copy_file_in.sh")
     subprocess.call("sh %(bshfile)s" % {"bshfile": bshfile}, shell = True)

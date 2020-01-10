@@ -51,3 +51,8 @@ Design of this tool set is keeping labeling new video recognition data in mind. 
 3. Host images(simple http server or image host);
 4. Annotate with dataturks, export data;
 5. Run back_endofline.sh;
+
+TODO: 
+    __call__ to implement generation
+    subprocess.popen to multiprocess
+    finish log decrator

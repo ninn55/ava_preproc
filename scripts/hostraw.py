@@ -53,11 +53,11 @@ def gen_txt_v2():
     dic = read_csv(csvfile)
     txtfile = "%(txt_name)s%(txt_suffix)s" % {"txt_suffix": txt_suffix, "txt_name": txt_name}
     txtfile = os.path.join(outdir, txtfile)
-    codeerror = subprocess.call("ls %(txtfile)s*"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
-    if codeerror == 0:
+    werror = subprocess.call("ls %(txtfile)s*"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+    if werror == 0:
         warnings.warn("WARNING. %(txtfile)s already exist remove first"% {"txtfile":txtfile})
-        codeerror = subprocess.call("rm -f %(txtfile)s"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
-        if codeerror != 0:
+        werror = subprocess.call("rm -f %(txtfile)s"% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+        if werror != 0:
             sys,exit("ERROR.%(txtfile)s remove failed."% {"txtfile":txtfile}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
 
     for i in dic:
@@ -65,7 +65,7 @@ def gen_txt_v2():
         time_id = i[1]
         temp1 = "%(time_id)s%(suffix)s"%{"time_id":time_id, "suffix": img_suffix}
         temp2 = os.path.join(video_id, temp1)
-        codeerror = subprocess.call("ls %(dir)s"%{"dir": os.path.join(keyframedir, temp2)}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
+        werror = subprocess.call("ls %(dir)s"%{"dir": os.path.join(keyframedir, temp2)}, shell = True, stderr = subprocess.DEVNULL, stdout = subprocess.DEVNULL)
         temp = "http://%(host_ip)s:%(port)s/%(name)s\n" % {"host_ip": host_ip, "port": PORT, "name": temp2}
         with open(txtfile, 'a') as f:
             f.write(temp)
